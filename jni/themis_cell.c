@@ -23,6 +23,7 @@
 #define MODE_TOKEN_PROTECT 1
 #define MODE_CONTEXT_IMPRINT 2
 
+// returns tuple { encrypted_message; additional_data; error_code }
 JNIEXPORT jobjectArray JNICALL Java_com_cossacklabs_themis_SecureCell_encrypt(JNIEnv *env, jobject thiz, jbyteArray key, jbyteArray context, jbyteArray data, jint mode)
 {
 	size_t key_length = (*env)->GetArrayLength(env, key);
@@ -53,7 +54,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_cossacklabs_themis_SecureCell_encrypt(JN
 	key_buf = (*env)->GetByteArrayElements(env, key, NULL);
 	if (!key_buf)
 	{
-		return NULL;
+		goto err;
 	}
 
 	data_buf = (*env)->GetByteArrayElements(env, data, NULL);
@@ -153,7 +154,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_cossacklabs_themis_SecureCell_encrypt(JN
 		goto err;
 	}
 
-	protected_data = (*env)->NewObjectArray(env, 2, (*env)->GetObjectClass(env, data), NULL);
+	protected_data = (*env)->NewObjectArray(env, 3, (*env)->GetObjectClass(env, data), NULL);
 	if (!protected_data)
 	{
 		goto err;
@@ -193,10 +194,15 @@ err:
 		(*env)->ReleaseByteArrayElements(env, key, key_buf, 0);
 	}
 
+	jbyte a[] = {(jbyte)res};
+    jbyteArray resultA = (*env)->NewByteArray(env, 1);
+	(*env)->SetByteArrayRegion(env, resultA, 0, 1, a);
+	(*env)->SetObjectArrayElement(env, protected_data, 2, resultA);
 	return protected_data;
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIEnv *env, jobject thiz, jbyteArray key, jbyteArray context, jobjectArray protected_data, jint mode)
+// returns tuple { decrypted_message; error_code }
+JNIEXPORT jobjectArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIEnv *env, jobject thiz, jbyteArray key, jbyteArray context, jobjectArray protected_data, jint mode)
 {
 	size_t key_length = (*env)->GetArrayLength(env, key);
 	size_t data_length = 0;
@@ -212,12 +218,19 @@ JNIEXPORT jbyteArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIE
 	jbyteArray encrypted_data = NULL;
 	jbyteArray additional_data = NULL;
 	jbyteArray data = NULL;
-	jbyteArray output = NULL;
+
+	jobjectArray output = NULL;
 
 	jbyte *encrypted_data_buf = NULL;
 	jbyte *additional_data_buf = NULL;
 
 	themis_status_t res;
+
+	output = (*env)->NewObjectArray(env, 2, (*env)->GetObjectClass(env, key), NULL);
+	if (!output)
+	{
+		goto err;
+	}
 
 	if (context)
 	{
@@ -228,7 +241,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIE
 	additional_data = (*env)->GetObjectArrayElement(env, protected_data, 1);
 	if (!encrypted_data)
 	{
-		return NULL;
+		goto err;
 	}
 
 	encrypted_data_length = (*env)->GetArrayLength(env, encrypted_data);
@@ -240,7 +253,7 @@ JNIEXPORT jbyteArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIE
 	key_buf = (*env)->GetByteArrayElements(env, key, NULL);
 	if (!key_buf)
 	{
-		return NULL;
+		goto err;
 	}
 
 	encrypted_data_buf = (*env)->GetByteArrayElements(env, encrypted_data, NULL);
@@ -311,6 +324,8 @@ JNIEXPORT jbyteArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIE
 		goto err;
 	}
 
+
+
 	switch (mode)
 	{
 	case MODE_SEAL:
@@ -343,7 +358,8 @@ JNIEXPORT jbyteArray JNICALL Java_com_cossacklabs_themis_SecureCell_decrypt(JNIE
 		goto err;
 	}
 
-	output = data;
+
+	(*env)->SetObjectArrayElement(env, output, 0, data);
 
 err:
 
@@ -371,6 +387,11 @@ err:
 	{
 		(*env)->ReleaseByteArrayElements(env, key, key_buf, 0);
 	}
+
+	jbyte a[] = {(jbyte)res};
+	jbyteArray resultA = (*env)->NewByteArray(env, 1);
+    (*env)->SetByteArrayRegion(env, resultA, 0, 1, a);
+	(*env)->SetObjectArrayElement(env, output, 1, resultA);
 
 	return output;
 }

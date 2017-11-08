@@ -91,8 +91,8 @@ public class SecureCell {
 	public static final int MODE_CONTEXT_IMPRINT = 2;
 	
 	static native byte[][] encrypt(byte[] key, byte[] context, byte[] data, int mode);
-	static native byte[] decrypt(byte[] key, byte[] context, byte[][] protectedData, int mode);
-	
+	static native byte[][] decrypt(byte[] key, byte[] context, byte[][] protectedData, int mode);
+
 	static SecureCellData protect(byte[] key, byte[] context, byte[] data, int mode) throws NullArgumentException, SecureCellException {
 		
 		if (null == key) {
@@ -116,6 +116,7 @@ public class SecureCell {
 			throw new SecureCellException();
 		}
 		
+		// protectedData[2] contains error message
 		return new SecureCellData(protectedData[0], protectedData[1]);
 	}
 	
@@ -146,12 +147,13 @@ public class SecureCell {
 			}
 		}
 		
-		byte[] data = decrypt(key, context, new byte[][]{protectedData.getProtectedData(), protectedData.getAdditionalData()}, mode);
-		if (null == data) {
+		byte[][] data = decrypt(key, context, new byte[][]{protectedData.getProtectedData(), protectedData.getAdditionalData()}, mode);
+		if (null == data || null == data[0]) {
 			throw new SecureCellException();
 		}
 		
-		return data;
+		// data[1] contains error message
+		return data[0];
 	}
 	
 	/**
