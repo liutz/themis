@@ -192,7 +192,7 @@ public class SecureCell {
 	 * @throws UnsupportedEncodingException when UTF-16 decoding is not supported
 	 */
 	public SecureCellData protect(String password, String context, byte[] data) throws UnsupportedEncodingException, NullArgumentException, SecureCellException {
-		return this.protect(password.getBytes(CHARSET), context.getBytes(CHARSET), data);
+		return this.protect(password.getBytes(CHARSET), (context == null) ? null : context.getBytes(CHARSET), data);
 	}
 	
 	/**
@@ -205,7 +205,7 @@ public class SecureCell {
 	 * @throws UnsupportedEncodingException when UTF-16 decoding is not supported
 	 */
 	public SecureCellData protect(String context, byte[] data) throws UnsupportedEncodingException, NullArgumentException, SecureCellException {
-		return this.protect(this.key, context.getBytes(CHARSET), data);
+		return this.protect(this.key, (context == null) ? null : context.getBytes(CHARSET), data);
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public class SecureCell {
 	 * @throws UnsupportedEncodingException when UTF-16 decoding is not supported
 	 */
 	public byte[] unprotect(String password, String context, SecureCellData protectedData) throws UnsupportedEncodingException, NullArgumentException, SecureCellException, InvalidArgumentException {
-		return this.unprotect(password.getBytes(CHARSET), context.getBytes(CHARSET), protectedData);
+		return this.unprotect(password.getBytes(CHARSET), (context == null) ? null : context.getBytes(CHARSET), protectedData);
 	}
 	
 	/**
@@ -261,6 +261,6 @@ public class SecureCell {
 	 * @throws UnsupportedEncodingException when UTF-16 decoding is not supported
 	 */
 	public byte[] unprotect(String context, SecureCellData protectedData) throws UnsupportedEncodingException, NullArgumentException, SecureCellException, InvalidArgumentException {
-		return this.unprotect(this.key, context.getBytes(CHARSET), protectedData);
+		return this.unprotect(this.key, (context == null) ? null : context.getBytes(CHARSET), protectedData);
 	}
 }
