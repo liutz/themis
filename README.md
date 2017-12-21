@@ -21,20 +21,20 @@
 #### Crypto library for storage and messaging for Swift, Obj-C, Android/Java, С++, JS, Python, Ruby, PHP, Go.
 <br>
 
-Themis is an open-source high-level cryptographic services library for mobile and server platforms, which provides secure data exchange and storage. Current stable release is [0.9.5](https://github.com/cossacklabs/themis/releases/tag/0.9.5), dated 13th of September 2017. 
+Themis is an open-source high-level cryptographic services library for mobile and server platforms, which provides secure data exchange and storage. The current stable release is [0.9.6](https://github.com/cossacklabs/themis/releases/tag/0.9.6), dated 14th of December 2017. 
 
 Themis provides four important cryptographic services:
 
 * **[Secure Message](https://github.com/cossacklabs/themis/wiki/Secure-Message-cryptosystem)**: a simple encrypted messaging solution for the widest scope of applications. Exchange the keys between the parties and you're good to go. Two pairs of the underlying crytosystems: ECC + ECDSA / RSA + PSS + PKCS#7. 
-* **[Secure Session](https://github.com/cossacklabs/themis/wiki/Secure-Session-cryptosystem)**: session-oriented, forward secrecy datagram exchange solution with better security guarantees, but more demanding infrastructure. Secure Session can perfectly function as socket encryption, session security or (with some additional infrastructure) as a high-level messaging primitive. ECDH key agreement, ECC & AES encryption.
+* **[Secure Session](https://github.com/cossacklabs/themis/wiki/Secure-Session-cryptosystem)**: session-oriented, forward secrecy datagram exchange solution with better security guarantees, but more demanding infrastructure. Secure Session can perfectly function as socket encryption, session security, or (with some additional infrastructure) as a high-level messaging primitive. ECDH key agreement, ECC & AES encryption.
 * **[Secure Cell](https://github.com/cossacklabs/themis/wiki/Secure-Cell-cryptosystem)**: a multi-mode cryptographic container suitable for storing anything from encrypted files to database records and format-preserved strings. Secure Cell is built around AES in GCM (Token and Seal modes) and CTR (Context imprint mode).
 * **[Secure Comparator](https://github.com/cossacklabs/themis/wiki/Secure-Comparator-cryptosystem)**: a Zero-Knowledge based cryptographic protocol for authentication and comparing secrets.
 
 **Want to go straight to the detailed documentation?** [Please proceed here](https://www.github.com/cossacklabs/themis/wiki). 
 
-We created Themis to build other products on top of it - i.e. [Acra](https://github.com/cossacklabs/acra) and [Hermes](https://www.cossacklabs.com/hermes/).
+We created Themis to build other products on top of it - i.e. [Acra](https://github.com/cossacklabs/acra) and [Hermes](https://github.com/cossacklabs/hermes-core).
 
-Themis works in most operating systems (see [Availability](https://github.com/cossacklabs/themis#availability)) and is available for [Swift (iOS, macOS)](https://github.com/cossacklabs/themis/wiki/Swift-Howto), [Objective-C (iOS, macOS)](https://github.com/cossacklabs/themis/wiki/Objective-C-Howto), [Java+Android](https://github.com/cossacklabs/themis/wiki/Java-and-Android-Howto),  [Ruby](https://github.com/cossacklabs/themis/wiki/Ruby-Howto),  [Python](https://github.com/cossacklabs/themis/wiki/Python-Howto), 
+Themis works on most operating systems (see [Availability](https://github.com/cossacklabs/themis#availability)) and is available for [Swift (iOS, macOS)](https://github.com/cossacklabs/themis/wiki/Swift-Howto), [Objective-C (iOS, macOS)](https://github.com/cossacklabs/themis/wiki/Objective-C-Howto), [Java+Android](https://github.com/cossacklabs/themis/wiki/Java-and-Android-Howto),  [Ruby](https://github.com/cossacklabs/themis/wiki/Ruby-Howto),  [Python](https://github.com/cossacklabs/themis/wiki/Python-Howto), 
 [PHP](https://github.com/cossacklabs/themis/wiki/PHP-Howto), 
 [C++](https://github.com/cossacklabs/themis/wiki/CPP-Howto), 
 [Javascript (NodeJS)](https://github.com/cossacklabs/themis/wiki/NodeJS-Howto), [Go](https://github.com/cossacklabs/themis/wiki/Go-HowTo),
@@ -42,7 +42,7 @@ Themis works in most operating systems (see [Availability](https://github.com/co
 
 We're also porting Themis features to different environments where people might need them: [Redis module](https://www.github.com/cossacklabs/rd_themis), [PostgreSQL module](https://www.github.com/cossacklabs/pg_themis)
 
-Themis was designed to provide complicated cryptosystems in an easy-to-use infrastructure, designed with modern rapid development in mind:
+Themis was designed to provide complicated cryptosystems in an easy-to-use infrastructure, with modern rapid development in mind:
 
 * **EASY**: Themis does not require users to obsess over parameters, cipher combination, and yet it provides high levels of security.
 * **DO YOUR THING**: Themis allows developers to focus on doing the necessary: developing their applications. 
@@ -57,8 +57,6 @@ Themis is open source, Apache 2 Licensed.
 ## Install Themis from Cossack Labs repository
 
 ### Debian / Ubuntu
-
-> Note: Depending on your permissions, adding `sudo` might be necessary!
 
 **1. Import the public key used by Cossack Labs to sign packages:**
 ```console
@@ -77,17 +75,19 @@ deb https://pkgs.cossacklabs.com/stable/$OS $RELEASE main
 ```
 * `$OS` should be `debian` or `ubuntu`.
 * `$RELEASE` should be one of Debian or Ubuntu release names. You can determine this by running `lsb_release -cs`, if you have `lsb_release` installed.
-* We currently build packages for the following OS and RELEASE combinations:
-*Debian "Wheezy" (Debian 7)*
-*Debian "Jessie" (Debian 8)*
-*Debian "Stretch" (Debian 9)*
-*Ubuntu Precise Pangolin (Ubuntu 12.04)*
-*Ubuntu Trusty Tahr (Ubuntu 14.04)*
-*Ubuntu Xenial Xerus (Ubuntu 16.04)*
-*Ubuntu Yakkety Yak (Ubuntu 16.10)*
-*Ubuntu Zesty Zapus (Ubuntu 17.04)*
 
-* For example, if you are running *Debian 9 "Stretch"*, run:
+We currently build packages for the following OS and RELEASE combinations:
+
+- *Debian "Wheezy" (Debian 7)*
+- *Debian "Jessie" (Debian 8)*
+- *Debian "Stretch" (Debian 9)*
+- *Ubuntu Trusty Tahr (Ubuntu 14.04)*
+- *Ubuntu Xenial Xerus (Ubuntu 16.04)*
+- *Ubuntu Yakkety Yak (Ubuntu 16.10)*
+- *Ubuntu Zesty Zapus (Ubuntu 17.04)*
+
+For example, if you are running *Debian 9 "Stretch"*, run:
+
 ```console
 echo "deb https://pkgs.cossacklabs.com/stable/debian stretch main" | \
   sudo tee /etc/apt/sources.list.d/cossacklabs.list
@@ -103,14 +103,13 @@ sudo apt-get install libthemis
 
 ### CentOS / RHEL / OEL
 
-> Note, we only build RPM packages for x86_64.
+> Note: We only build RPM packages for x86_64.
 
 **1. Import the public key used by Cossack Labs to sign packages:**
 
+```console
+sudo rpm --import https://pkgs.cossacklabs.com/gpg
 ```
-rpm --import https://pkgs.cossacklabs.com/gpg
-```
-
 > Note: If you wish to validate key fingerprint, it is: `29CF C579 AD90 8838 3E37 A8FA CE53 BCCA C8FF FACB`.
 
 **2. Create a Yum repository file for Cossack Labs package repository:**
@@ -125,14 +124,12 @@ wget -qO - https://pkgs.cossacklabs.com/stable/centos/cossacklabs.repo | \
 sudo yum install libthemis
 ```
 
+That's all! Themis is ready to use. The easiest way is to follow one of the tutorials and examples provided below.
+
 ## Install Themis from GitHub
 
-> Note:
->
-> ⚠️ OpenSSL 1.1.0f support is coming soon (check [#208](https://github.com/cossacklabs/themis/issues/208) issue to track the progress).
-
 1. Fetch the repository: git clone https://github.com/cossacklabs/themis.git.
-2. Make sure OpenSSL/LibreSSL + OpenSSL/LibreSSL Dev package (libssl-dev) are installed at typical paths: `/usr/lib`, `/usr/include`. 
+2. Make sure OpenSSL/LibreSSL + OpenSSL/LibreSSL Dev package (libssl-dev) are installed at typical paths: `/usr/lib`, `/usr/include` (`/usr/local/*` for macOS). 
 3. Make sure the typical GCC/clang environment is installed.
 4. Type 'make install' and you're done (in most of the cases).
 5. Visit [our wiki](https://github.com/cossacklabs/themis/wiki) for the documentation specific to your language of choice and take a look at docs/examples for examples. 
@@ -145,8 +142,8 @@ Themis is available for the following languages/platforms:
 
 | Platform | Documentation | Examples | Version |
 | :----- | :----- | :------ | :--- |
-| 🔶 Swift (iOS, MacOS) | [Swift Howto](https://github.com/cossacklabs/themis/wiki/Swift-Howto) | [docs/examples/swift](https://github.com/cossacklabs/themis/tree/master/docs/examples/swift) | [![CocoaPods](https://img.shields.io/cocoapods/v/themis.svg)](https://cocoapods.org/pods/themis) |
-| 📱 Objective-C (iOS, MacOS) | [Objective-C Howto](https://github.com/cossacklabs/themis/wiki/Objective-C-Howto) | [docs/examples/objc](https://github.com/cossacklabs/themis/tree/master/docs/examples/objc)| [![CocoaPods](https://img.shields.io/cocoapods/v/themis.svg)](https://cocoapods.org/pods/themis) |
+| 🔶 Swift (iOS, macOS) | [Swift Howto](https://github.com/cossacklabs/themis/wiki/Swift-Howto) | [docs/examples/swift](https://github.com/cossacklabs/themis/tree/master/docs/examples/swift) | [![CocoaPods](https://img.shields.io/cocoapods/v/themis.svg)](https://cocoapods.org/pods/themis) |
+| 📱 Objective-C (iOS, macOS) | [Objective-C Howto](https://github.com/cossacklabs/themis/wiki/Objective-C-Howto) | [docs/examples/objc](https://github.com/cossacklabs/themis/tree/master/docs/examples/objc)| [![CocoaPods](https://img.shields.io/cocoapods/v/themis.svg)](https://cocoapods.org/pods/themis) |
 | ☕️ Java / Android | [Java & Android Howto](https://github.com/cossacklabs/themis/wiki/Java-and-Android-Howto) | [jni example](https://github.com/cossacklabs/themis/tree/master/jni) ||
 | ♦️ Ruby | [Ruby Howto](https://github.com/cossacklabs/themis/wiki/Ruby-Howto) | [docs/examples/ruby](https://github.com/cossacklabs/themis/tree/master/docs/examples/ruby) | [![Gem](https://img.shields.io/gem/v/rubythemis.svg)](https://rubygems.org/gems/rubythemis) |
 | 🐍 Python | [Python Howto](https://github.com/cossacklabs/themis/wiki/Python-Howto) | [docs/examples/python](https://github.com/cossacklabs/themis/tree/master/docs/examples/python) | [![PyPI](https://img.shields.io/pypi/v/pythemis.svg)](https://pypi.python.org/pypi?%3Aaction=search&term=pythemis&submit=search) |
@@ -159,7 +156,7 @@ Themis is available for the following languages/platforms:
 
 # Plugins
 
-Themis-based plugins are built to enable Themis features across various platforms and products: 
+Themis-based plugins are built to enable Themis' features across various platforms and products: 
 
 - [RD_Themis](https://github.com/cossacklabs/rd_themis) for Redis database
 - [PG_Themis](https://github.com/cossacklabs/pg_themis) for PostgreSQL database
@@ -167,14 +164,14 @@ Themis-based plugins are built to enable Themis features across various platform
 
 # Availability
 
-Themis supports the following architectures: x86/x64, armv*, various Androids
+Themis supports the following architectures: x86/x64, armv*, various Android architectures.
 
 It is checked to compile on the latest stable versions of:
 
 * Debian 7.8+, CentOS 7, Ubuntu 14, Arch Linux 2014+
 * Windows XP+
 * OSX 10.9+
-* Android 4-5+ / CyanogenMod 11+
+* Android 4-8+ / CyanogenMod 11+
 * iOS8—iOS11+, x32/x64
 
 We plan to expand this list with broader set of platforms. If you'd like to help improve or bring Themis to your favourite platform / language — [get in touch](info@cossacklabs.com).
@@ -202,17 +199,18 @@ If you'd like to experiment with Themis in a more interactive environment, check
 
 # Contributing to us
 
-If you’d like to contribute your code or other kind of input to Themis, you’re welcome. Head over to our [Contribution guidelines](https://github.com/cossacklabs/themis/wiki/Contribute) as your starting point.
+If you're looking for something to contribute to and gain eternal respect, just pick the things in the [list of issues](https://github.com/cossacklabs/themis/issues). Head over to our [Contribution guidelines](https://github.com/cossacklabs/themis/wiki/Contribute) as your starting point.
 
 
 # Documentation
 
 [Project's GitHub Wiki](https://www.github.com/cossacklabs/themis/wiki) contains the ever-evolving official documentation, which contains everything from deployment guidelines to use-cases, with a brief explanation of cryptosystems and architecture behind the main Themis library sandwiched in. 
 
+# Contacts
 
-# Communication
+If you want to ask a technical question, feel free to raise an [issue](https://github.com/cossacklabs/themis/issues) or write to [dev@cossacklabs.com](mailto:dev@cossacklabs.com).
 
-[![Twitter CossackLabs](https://img.shields.io/badge/twitter-cossacklabs-fbb03b.svg)](http://twitter.com/cossacklabs)
-[![Blog](https://img.shields.io/badge/blog-cossacklabs.com-7a7c98.svg)](https://cossacklabs.com/)
-[![Join the chat at https://gitter.im/cossacklabs/themis](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cossacklabs/themis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+To talk to the business wing of Cossack Labs Limited, drop us an email to [info@cossacklabs.com](mailto:info@cossacklabs.com).
+   
+[![Blog](https://img.shields.io/badge/blog-cossacklabs.com-7a7c98.svg)](https://cossacklabs.com/) [![Twitter CossackLabs](https://img.shields.io/badge/twitter-cossacklabs-fbb03b.svg)](http://twitter.com/cossacklabs) [![Medium CossackLabs](https://img.shields.io/badge/medium-%40cossacklabs-orange.svg)](https://medium.com/@cossacklabs/) [![Join the chat at https://gitter.im/cossacklabs/themis](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cossacklabs/themis?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

@@ -100,7 +100,7 @@ ifdef IS_MACOS
 	ifeq ($(CRYPTO_ENGINE_PATH),openssl)
 
 		# if brew is installed, if openssl is installed
-		PACKAGELIST = $(shell brew list | grep 'openssl')
+		PACKAGELIST = $(shell brew list | grep -om1 '^openssl')
 		ifeq ($(PACKAGELIST),openssl)
 
 		 	# path to openssl (usually "/usr/local/opt/openssl")
@@ -145,6 +145,7 @@ ifeq ($(RSA_KEY_LENGTH),8192)
 	CFLAGS += -DTHEMIS_RSA_KEY_LENGTH=RSA_KEY_LENGTH_8192
 endif
 
+DEFAULT_VERSION := 0.9.5
 GIT_VERSION := $(shell if [ -d ".git" ]; then git version; fi 2>/dev/null)
 # check that repo has any tag
 GIT_TAG_STATUS := $(shell git describe --tags HEAD 2>/dev/null)
@@ -157,7 +158,7 @@ ifdef GIT_VERSION
                 VERSION = $(shell git describe --tags HEAD | cut -b 1-)
         else
 # <base_version>-<total_commit_count>-<last_commit_hash>
-                VERSION = 0.9-$(shell git rev-list --all --count)-$(shell git describe --always HEAD)
+                VERSION = $(DEFAULT_VERSION)-$(shell git rev-list --all --count)-$(shell git describe --always HEAD)
         endif
 else
 # if it's not git repo then use date as version
@@ -219,6 +220,9 @@ endif
 
 # Should pay attention to warnings (some may be critical for crypto-enabled code (ex. signed-unsigned mismatch)
 CFLAGS += -Werror -Wno-switch
+
+# strict checks for docs
+#CFLAGS += -Wdocumentation -Wno-error=documentation
 
 ifndef ERROR
 include src/soter/soter.mk
@@ -462,18 +466,16 @@ MAINTAINER = "Cossack Labs Limited <dev@cossacklabs.com>"
 # tag version from VCS
 VERSION := $(shell git describe --tags HEAD | cut -b 1-)
 LICENSE_NAME = "Apache License Version 2.0"
+
 LIBRARY_SO_VERSION := $(shell echo $(VERSION) | sed 's/^\([0-9.]*\)\(.*\)*$$/\1/')
+ifeq ($(LIBRARY_SO_VERSION),)
+	LIBRARY_SO_VERSION := $(DEFAULT_VERSION)
+endif
 
 DEBIAN_CODENAME := $(shell lsb_release -cs 2> /dev/null)
-DEBIAN_STRETCH_VERSION := libssl1.0.2
 DEBIAN_ARCHITECTURE = `dpkg --print-architecture 2>/dev/null`
+DEBIAN_DEPENDENCIES := --depends openssl
 
-ifeq ($(DEBIAN_CODENAME),stretch)
-        DEBIAN_DEPENDENCIES := --depends $(DEBIAN_STRETCH_VERSION)
-else
-
-        DEBIAN_DEPENDENCIES := --depends openssl
-endif
 RPM_DEPENDENCIES = --depends openssl
 RPM_RELEASE_NUM = 1
 
@@ -531,12 +533,12 @@ symlink_realname_to_soname:
 	done
 
 
-strip: 
+strip:
 	@find . -name \*.$(SHARED_EXT)\.* -exec strip -o {} {} \;
 
 deb: test soter_static themis_static soter_shared themis_shared collect_headers install_shell_scripts strip symlink_realname_to_soname
 	@mkdir -p $(BIN_PATH)/deb
-	
+
 #libPACKAGE-dev
 	@fpm --input-type dir \
 		 --output-type deb \
@@ -554,7 +556,7 @@ deb: test soter_static themis_static soter_shared themis_shared collect_headers 
 		 --after-remove $(POST_UNINSTALL_SCRIPT) \
 		 --category $(PACKAGE_CATEGORY) \
 		 $(HEADER_FILES_MAP)
-		 
+
 #libPACKAGE
 	@fpm --input-type dir \
 		 --output-type deb \

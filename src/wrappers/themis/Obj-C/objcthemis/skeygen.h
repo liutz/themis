@@ -29,6 +29,7 @@
 * @{
 */
 
+NS_ASSUME_NONNULL_BEGIN
 
 /** @brief supported asymmetric cryptography algorithms */
 typedef NS_ENUM(NSInteger, TSKeyGenAsymmetricAlgorithm) {
@@ -49,12 +50,14 @@ typedef NS_ENUM(NSInteger, TSKeyGenAsymmetricAlgorithm) {
 
 /**
 * @brief initialise key pair generator, generates privateKey and publicKey
-* @param [in] alg algorithm. @see TSKeyGenAsymmetricAlgorithm
+* @param [in] algorithm, RSA or EC. @see TSKeyGenAsymmetricAlgorithm
 */
-- (instancetype)initWithAlgorithm:(TSKeyGenAsymmetricAlgorithm)algorithm;
+- (nullable instancetype)initWithAlgorithm:(TSKeyGenAsymmetricAlgorithm)algorithm;
 
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 /** @} */
 /** @} */

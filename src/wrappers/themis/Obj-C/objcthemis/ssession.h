@@ -29,6 +29,8 @@
 * @{
 */
 
+NS_ASSUME_NONNULL_BEGIN
+
 /** @brief Secure session interface
 *
 * Secure session is a lightweight mechanism to secure any network communications (both private and public networks
@@ -49,11 +51,13 @@
 
 /**
 * @brief Initialise Secure session object
-* @param [in] id User id
+* @param [in] userId User id
 * @param [in] privateKey User private key
 * @param [in] callbacks Reference to TSSessionTransportInterface object
 */
-- (instancetype)initWithUserId:(NSData *)id privateKey:(NSData *)privateKey callbacks:(TSSessionTransportInterface *)callbacks;
+- (nullable instancetype)initWithUserId:(NSData *)userId
+                                privateKey:(NSData *)privateKey
+                              callbacks:(TSSessionTransportInterface *)callbacks;
 
 
 /**
@@ -61,23 +65,25 @@
 * @return Connection initialization message on success or nil on failure
 */
 // TODO: rename method to reflect it's goal
-- (NSData *)connectRequest:(NSError **)error;
+- (nullable NSData *)connectRequest:(NSError * __autoreleasing *)error;
 
 
 /**
 * @brief Create connection initialization message and send it to peer by \b send method from callbacks object.
 * @see TSSessionTransportInterface.
+* @return YES if success, NO if fail.
 */
 // TODO: rename method to reflect it's goal
-- (void)connect:(NSError **)error;
+- (BOOL)connect:(NSError * __autoreleasing *)error;
 
 
-/** @brief Wrap message
+/**
+* @brief Wrap message
 * @param [in] message message to wrap
 * @param [in] error pointer to Error on failure
 * @return Wrapped message in NSData object on success or nil on failure.
 */
-- (NSData *)wrapData:(NSData *)message error:(NSError **)error;
+- (nullable NSData *)wrapData:(nullable NSData *)message error:(NSError * __autoreleasing *)error;
 
 
 /** @brief Unwrap message
@@ -85,25 +91,27 @@
 * @param [in] error pointer to Error on failure
 * @return Unwrapped message in NSData object on success or nil on failure.
 */
-- (NSData *)unwrapData:(NSData *)message error:(NSError **)error;
+- (nullable NSData *)unwrapData:(nullable NSData *)message error:(NSError * __autoreleasing *)error;
 
 
 /** @brief Wrap message and sent it to peer by \b send method from callbacks object.
 * @param [in] message message to wrap
 * @param [in] error pointer to Error on failure
-* @see TSSessionTransportInterface. */
+* @see TSSessionTransportInterface.
+* @return YES if success, NO if fail.
+*/
 // TODO: rename method to reflect it's goal
- - (void)wrapAndSend:(NSData *)message error:(NSError **)error;
+- (BOOL)wrapAndSend:(nullable NSData *)message error:(NSError * __autoreleasing *)error;
 
 
 /** @brief Unwrap received from peer by \b receive method from callbacks object message.
 * @see TSSessionTransportInterface.
-* @param [in] length
+* @param [in] length of data to receive
 * @param [in] error pointer to Error on failure
 * @return Plain message in NSData object on success or nil on failure.
 */
 // TODO: rename method to reflect it's goal
-- (NSData *)unwrapAndReceive:(NSUInteger)length error:(NSError **)error;
+- (nullable NSData *)unwrapAndReceive:(NSUInteger)length error:(NSError * __autoreleasing *)error;
 
 
 /** @brief indicate session established state.
@@ -112,5 +120,8 @@
 - (BOOL)isSessionEstablished;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
 /** @} */
 /** @} */
