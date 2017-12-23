@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 
+#include <syslog.h>
 #include <themis/secure_cell.h>
 #include <themis/themis_error.h>
 #include "sym_enc_message.h"
@@ -28,11 +29,19 @@ themis_status_t themis_secure_cell_encrypt_seal(const uint8_t* master_key,
 						size_t* encrypted_message_length){
   size_t ctx_length_;
   size_t msg_length_;
+
+  syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log1: master_key_length = %zu, user_context_length = %zu, message_length = %zu", 
+  	master_key_length, user_context_length, message_length);
+
   THEMIS_STATUS_CHECK(themis_auth_sym_encrypt_message(master_key, master_key_length, message, message_length, user_context, user_context_length, NULL, &ctx_length_, NULL, &msg_length_),THEMIS_BUFFER_TOO_SMALL);
   if(encrypted_message==NULL || (*encrypted_message_length)<(ctx_length_+msg_length_)){
     (*encrypted_message_length)=(ctx_length_+msg_length_);
     return THEMIS_BUFFER_TOO_SMALL;
   }
+
+  syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log1: master_key_length = %zu, user_context_length = %zu, message_length = %zu, encrypted_message_length = %zu", 
+  	master_key_length, user_context_length, message_length, *encrypted_message_length);
+
   return themis_auth_sym_encrypt_message(master_key, master_key_length, message, message_length, user_context, user_context_length, encrypted_message, &ctx_length_, encrypted_message+ctx_length_, &msg_length_);
 }
 
@@ -46,8 +55,15 @@ themis_status_t themis_secure_cell_decrypt_seal(const uint8_t* master_key,
 						size_t* plain_message_length){
   size_t ctx_length_=0;
   size_t msg_length_=0;
+
+  syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_decrypt_seal: log1: master_key_length = %zu, user_context_length = %zu, message_length = %zu", 
+  	master_key_length, user_context_length, msg_length_);
+
   THEMIS_STATUS_CHECK(themis_auth_sym_decrypt_message(master_key, master_key_length, user_context, user_context_length, encrypted_message, encrypted_message_length, NULL, 0, NULL, &msg_length_),THEMIS_BUFFER_TOO_SMALL);
   ctx_length_=encrypted_message_length-msg_length_;
+
+  syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_decrypt_seal: log2: master_key_length = %zu, user_context_length = %zu, message_length = %zu, encrypted_message_length = %zu", 
+  	master_key_length, user_context_length, msg_length_, encrypted_message_length);
   return themis_auth_sym_decrypt_message(master_key, master_key_length, user_context, user_context_length, encrypted_message, ctx_length_, encrypted_message+ctx_length_, msg_length_, plain_message, plain_message_length);
 }
 

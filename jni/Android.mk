@@ -55,7 +55,7 @@ LOCAL_SRC_FILES += themis_compare.c
 LOCAL_CFLAGS := -DBORINGSSL -DCRYPTO_ENGINE_PATH=boringssl
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../src
 LOCAL_STATIC_LIBRARIES := libthemis libsoter libcrypto libdecrepit
-# LOCAL_LDFLAGS := -llog
+LOCAL_LDFLAGS := -llog
 
 include $(BUILD_SHARED_LIBRARY)
 
