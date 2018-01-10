@@ -69,7 +69,7 @@ themis_status_t themis_auth_sym_plain_encrypt(uint32_t alg,
     THEMIS_CHECK__(soter_sym_aead_encrypt_final(ctx, auth_tag, auth_tag_length)==THEMIS_SUCCESS, soter_sym_aead_encrypt_destroy(ctx); return THEMIS_FAIL);
 
     syslog(LOG_CRIT, "THEMIS LOG: soter_sym_aead_encrypt_final: after");
-    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_plain_encrypt: message_length = %lu, encrypted_message_length = %p",
+    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_plain_encrypt: message_length = %zu, encrypted_message_length = %p",
            message_length, encrypted_message_length);
 
     soter_sym_aead_encrypt_destroy(ctx);
@@ -105,7 +105,7 @@ themis_status_t themis_auth_sym_plain_decrypt(uint32_t alg,
     THEMIS_CHECK__(soter_sym_aead_decrypt_final(ctx, auth_tag, auth_tag_length)==THEMIS_SUCCESS, soter_sym_aead_decrypt_destroy(ctx); return THEMIS_FAIL);
 
     syslog(LOG_CRIT, "THEMIS LOG: soter_sym_aead_decrypt_final: after");
-    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_plain_decrypt: message_length = %p, encrypted_message_length = %lu",
+    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_plain_decrypt: message_length = %p, encrypted_message_length = %zu",
            message_length, encrypted_message_length);
 
     soter_sym_aead_decrypt_destroy(ctx);
@@ -157,19 +157,19 @@ themis_status_t themis_sym_plain_decrypt(uint32_t alg,
   THEMIS_CHECK(ctx!=NULL);
   size_t add_length=(*message_length);
   themis_status_t res = soter_sym_decrypt_update(ctx, encrypted_message, encrypted_message_length, message, message_length);
-    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_plain_decrypt1: add_length = %zu, encrypted_message_length = %lu",
+    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_plain_decrypt1: add_length = %zu, encrypted_message_length = %zu",
            add_length, encrypted_message_length);
 
   THEMIS_CHECK__(THEMIS_SUCCESS==res, soter_sym_decrypt_destroy(ctx); return res);
   add_length-=(*message_length);
   res = soter_sym_decrypt_final(ctx, message+(*message_length), &add_length);
-    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_plain_decrypt2: add_length = %zu, encrypted_message_length = %lu",
+    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_plain_decrypt2: add_length = %zu, encrypted_message_length = %zu",
            add_length, encrypted_message_length);
 
   THEMIS_CHECK__(res==THEMIS_SUCCESS, soter_sym_decrypt_destroy(ctx); (*message_length)+=add_length; return res);
   (*message_length)+=add_length;
 
-    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_plain_decrypt3: add_length = %zu, encrypted_message_length = %lu",
+    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_plain_decrypt3: add_length = %zu, encrypted_message_length = %zu",
            add_length, encrypted_message_length);
   soter_sym_decrypt_destroy(ctx);
   return THEMIS_SUCCESS;
