@@ -228,7 +228,9 @@ themis_status_t themis_auth_sym_encrypt_message(const uint8_t* key,
 						 uint8_t* encrypted_message,
 						 size_t* encrypted_message_length){
   uint8_t key_[THEMIS_AUTH_SYM_KEY_LENGTH/8];
-  THEMIS_CHECK_PARAM(message!=NULL && message_length!=0);
+    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: before checking params: message_length = %zu", message_length);
+
+    THEMIS_CHECK_PARAM(message!=NULL && message_length!=0);
 
 
     syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: before kdf: key_ = %s, key_length = %zu",
