@@ -33,7 +33,12 @@ themis_status_t themis_secure_cell_encrypt_seal(const uint8_t* master_key,
   syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log1: master_key_length = %zu, user_context_length = %zu, message_length = %zu",
   	master_key_length, user_context_length, message_length);
 
-  THEMIS_STATUS_CHECK(themis_auth_sym_encrypt_message(master_key, master_key_length, message, message_length, user_context, user_context_length, NULL, &ctx_length_, NULL, &msg_length_),THEMIS_BUFFER_TOO_SMALL);
+
+  themis_status_t st = themis_auth_sym_encrypt_message(master_key, master_key_length, message, message_length, user_context, user_context_length, NULL, &ctx_length_, NULL, &msg_length_);
+    syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log11: themis_status_t = %i, master_key_length = %zu, user_context_length = %zu, message_length = %zu",
+           st, master_key_length, user_context_length, message_length);
+
+    THEMIS_STATUS_CHECK(st, THEMIS_BUFFER_TOO_SMALL);
 
     syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log2: before THEMIS_BUFFER_TOO_SMALL");
     syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log3: master_key_length = %zu, user_context_length = %zu, message_length = %zu, ctx_length_ = %zu, msg_length_ = %zu",
