@@ -27,8 +27,8 @@ themis_status_t themis_secure_cell_encrypt_seal(const uint8_t* master_key,
 						const size_t message_length,
 						uint8_t* encrypted_message,
 						size_t* encrypted_message_length){
-  size_t ctx_length_;
-  size_t msg_length_;
+  size_t ctx_length_ = 0;
+  size_t msg_length_ = 0;
 
   syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log1: master_key_length = %zu, user_context_length = %zu, message_length = %zu",
   	master_key_length, user_context_length, message_length);
@@ -36,13 +36,15 @@ themis_status_t themis_secure_cell_encrypt_seal(const uint8_t* master_key,
   THEMIS_STATUS_CHECK(themis_auth_sym_encrypt_message(master_key, master_key_length, message, message_length, user_context, user_context_length, NULL, &ctx_length_, NULL, &msg_length_),THEMIS_BUFFER_TOO_SMALL);
 
     syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log2: before THEMIS_BUFFER_TOO_SMALL");
+    syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log3: master_key_length = %zu, user_context_length = %zu, message_length = %zu, ctx_length_ = %zu, msg_length_ = %zu",
+           master_key_length, user_context_length, message_length, ctx_length_, msg_length_);
 
     if(encrypted_message==NULL || (*encrypted_message_length)<(ctx_length_+msg_length_)){
     (*encrypted_message_length)=(ctx_length_+msg_length_);
     return THEMIS_BUFFER_TOO_SMALL;
   }
 
-  syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log3: master_key_length = %zu, user_context_length = %zu, message_length = %zu, encrypted_message_length = %zu, ctx_length_ = %zu, msg_length_ = %zu",
+  syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log4: master_key_length = %zu, user_context_length = %zu, message_length = %zu, encrypted_message_length = %zu, ctx_length_ = %zu, msg_length_ = %zu",
   	master_key_length, user_context_length, message_length, *encrypted_message_length, ctx_length_, msg_length_);
 
   return themis_auth_sym_encrypt_message(master_key, master_key_length, message, message_length, user_context, user_context_length, encrypted_message, &ctx_length_, encrypted_message+ctx_length_, &msg_length_);

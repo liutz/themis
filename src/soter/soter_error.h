@@ -27,7 +27,7 @@
 #include <stdint.h>
 
 /** @brief return type */
-typedef int soter_status_t;
+typedef int32_t soter_status_t;
 
 /**
  * @addtogroup SOTER
@@ -56,11 +56,11 @@ typedef int soter_status_t;
  */
 
 #ifdef DEBUG
-#define SOTER_ERROR_OUT(message) fprintf(stderr, "%s:%u - error: %s\n",__FILE__,__LINE__,message) 
-#define SOTER_DEBUG_OUT(message) fprintf(stdout, "%s:%u - debug: %s\n",__FILE__,__LINE__,message)
+#define SOTER_ERROR_OUT(message) fprintf(stderr, "THEMIS LOG %s:%u - error: %s\n",__FILE__,__LINE__,message)
+#define SOTER_DEBUG_OUT(message) fprintf(stdout, "THEMIS LOG %s:%u - debug: %s\n",__FILE__,__LINE__,message)
 #else
-#define SOTER_ERROR_OUT(message)
-#define SOTER_DEBUG_OUT(message)
+#define SOTER_ERROR_OUT(message) fprintf(stderr, "THEMIS LOG %s:%u - error: %s\n",__FILE__,__LINE__,message)
+#define SOTER_DEBUG_OUT(message) fprintf(stdout, "THEMIS LOG %s:%u - debug: %s\n",__FILE__,__LINE__,message)
 #endif
 
 #define UNUSED(x) (void)(x)
