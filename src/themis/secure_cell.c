@@ -38,7 +38,11 @@ themis_status_t themis_secure_cell_encrypt_seal(const uint8_t* master_key,
     syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log11: themis_status_t = %i, master_key_length = %zu, user_context_length = %zu, message_length = %zu",
            st, master_key_length, user_context_length, message_length);
 
-    THEMIS_STATUS_CHECK(st, THEMIS_BUFFER_TOO_SMALL);
+	if(st!=THEMIS_BUFFER_TOO_SMALL) {
+		syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log12");
+	}
+	
+	THEMIS_STATUS_CHECK(st, THEMIS_BUFFER_TOO_SMALL);
 
     syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log2: before THEMIS_BUFFER_TOO_SMALL");
     syslog(LOG_CRIT, "THEMIS LOG: themis_secure_cell_encrypt_seal: log3: master_key_length = %zu, user_context_length = %zu, message_length = %zu, ctx_length_ = %zu, msg_length_ = %zu",
