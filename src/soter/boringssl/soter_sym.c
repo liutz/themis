@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 
+#include <syslog.h>
 #include <string.h>
 #include "soter/soter.h"
 #include "soter_engine.h"
@@ -104,6 +105,10 @@ soter_sym_ctx_t* soter_sym_ctx_init(const uint32_t alg,
   //  if(iv!=NULL && (iv_length<SOTER_SYM_BLOCK_LENGTH(alg))){ // как проверить длину iv??
   //  return NULL;
   //}
+
+  syslog(LOG_CRIT, "THEMIS LOG: soter_sym_ctx_init: log1: key_length = %zu, key_length_ = %zu, salt_length = %zu, iv_length = %zu", 
+    key_length, key_length_, salt_length, iv_length);
+  
   SOTER_IF_FAIL_(soter_withkdf(alg,key, key_length, salt, salt_length, key_, &key_length_)==SOTER_SUCCESS, soter_sym_encrypt_destroy(ctx));
   if(encrypt){
     SOTER_IF_FAIL_(EVP_EncryptInit_ex(&(ctx->evp_sym_ctx), algid_to_evp(alg), NULL, key_, iv), soter_sym_encrypt_destroy(ctx));
@@ -176,6 +181,8 @@ soter_status_t soter_sym_ctx_final(soter_sym_ctx_t *ctx,
 soter_status_t soter_sym_aead_ctx_final(soter_sym_ctx_t *ctx,bool encrypt){
   uint8_t out_data[16];
   size_t out_data_length=0;
+  syslog(LOG_CRIT, "THEMIS LOG: soter_sym_aead_ctx_final: log1: encrypt= %i, out_data_length = %zu", 
+    encrypt, out_data_length);
   if(encrypt){
     SOTER_CHECK(EVP_EncryptFinal_ex(&(ctx->evp_sym_ctx), out_data, (int*)&out_data_length)!=0 && out_data_length==0);
   } else {
@@ -254,6 +261,10 @@ soter_status_t soter_sym_aead_encrypt_final(soter_sym_ctx_t *ctx, void* auth_tag
     (*auth_tag_length)=SOTER_AES_GCM_AUTH_TAG_LENGTH;
     return SOTER_BUFFER_TOO_SMALL;
   }
+
+  syslog(LOG_CRIT, "THEMIS LOG: soter_sym_aead_encrypt_final: log1: auth_tag_length = %zu", 
+    *auth_tag_length);
+
   SOTER_CHECK(soter_sym_aead_ctx_final(ctx, true)==SOTER_SUCCESS);
   SOTER_CHECK(EVP_CIPHER_CTX_ctrl(&(ctx->evp_sym_ctx), EVP_CTRL_GCM_GET_TAG, SOTER_AES_GCM_AUTH_TAG_LENGTH, auth_tag));
   (*auth_tag_length)=SOTER_AES_GCM_AUTH_TAG_LENGTH;
