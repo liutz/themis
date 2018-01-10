@@ -33,10 +33,17 @@ themis_status_t themis_sym_kdf(const uint8_t* master_key,
 			       const size_t context2_length,
 			       uint8_t* key,
 			       size_t key_length){
-  THEMIS_CHECK_PARAM(master_key!=NULL && master_key_length!=0);
+    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_kdf 1: enter");
+
+
+    THEMIS_CHECK_PARAM(master_key!=NULL && master_key_length!=0);
   THEMIS_CHECK_PARAM(context!=NULL && context_length!=0);
   soter_kdf_context_buf_t ctx[2]={{context, context_length}, {context2, context2_length}};
-  THEMIS_CHECK(soter_kdf(master_key, master_key_length, label, ctx, (context2==NULL||context2_length==0)?1:2, key, key_length)==THEMIS_SUCCESS);
+    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_kdf 2: master_key_length = %zu, context_length = %zu, context2_length = %zu", master_key_length, context_length, context2_length);
+
+    THEMIS_CHECK(soter_kdf(master_key, master_key_length, label, ctx, (context2==NULL||context2_length==0)?1:2, key, key_length)==THEMIS_SUCCESS);
+    syslog(LOG_CRIT, "THEMIS LOG: themis_sym_kdf 3: master_key_length = %zu, context_length = %zu, context2_length = %zu", master_key_length, context_length, context2_length);
+
   return THEMIS_SUCCESS;
 }
 
@@ -55,7 +62,7 @@ themis_status_t themis_auth_sym_plain_encrypt(uint32_t alg,
 					      size_t* auth_tag_length){
   soter_sym_ctx_t *ctx = soter_sym_aead_encrypt_create(alg, key, key_length, NULL,0,iv, iv_length);
 
-    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_plain_encrypt: context check");
+    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_plain_encrypt: context check, key = %s, key_length = %zu, iv_length = %zu", key, key_length, iv_length);
 
   THEMIS_CHECK(ctx!=NULL);
   if(aad!=NULL || aad_length!=0){
@@ -230,7 +237,7 @@ themis_status_t themis_auth_sym_encrypt_message(const uint8_t* key,
     syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: enter the function");
 
     uint8_t key_[THEMIS_AUTH_SYM_KEY_LENGTH/8];
-    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: before checking params: message_length = %zu, key_ = %s, message = %s", message_length, key_, message);
+    syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: before checking params: message_length = %zu, key_ = %zu, message = %s, keys = %i", message_length, sizeof(key_), message, THEMIS_AUTH_SYM_KEY_LENGTH/8);
 
     THEMIS_CHECK_PARAM(message!=NULL && message_length!=0);
 
@@ -243,11 +250,11 @@ themis_status_t themis_auth_sym_encrypt_message(const uint8_t* key,
            st, key_length, message_length, sizeof(message_length), in_context_length, key_, sizeof(key_));
 
 
-    if(st!=THEMIS_SUCCESS) {
+    if(st!=(themis_status_t)THEMIS_SUCCESS) {
         syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: log12");
     }
 
-    THEMIS_STATUS_CHECK(st, THEMIS_SUCCESS);
+    THEMIS_STATUS_CHECK(st, (themis_status_t)THEMIS_SUCCESS);
 
     syslog(LOG_CRIT, "THEMIS LOG: themis_auth_sym_encrypt_message: after kdf: key_ = %s, key_length = %zu",
            key_, key_length);
