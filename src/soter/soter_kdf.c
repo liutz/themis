@@ -19,6 +19,7 @@
 #include <soter/soter_error.h>
 
 #include <string.h>
+#include <syslog.h>
 
 #define MAX_HMAC_SIZE 64 /* For HMAC-SHA512 */
 #define MIN_VAL(_X_, _Y_) ((_X_ < _Y_) ? (_X_) : (_Y_))
@@ -34,7 +35,10 @@ soter_status_t soter_kdf(const void *key, size_t key_length, const char *label, 
 
 	uint8_t implicit_key[32];
 
-	/* If key is not specified, we will generate it from other information (useful for using this kdf for generating data from non-secret parameters such as session_id) */
+    syslog(LOG_CRIT, "THEMIS LOG: soter_kdf 2: out_length = %zu, context.len = %c", out_length, context[0].length);
+
+
+    /* If key is not specified, we will generate it from other information (useful for using this kdf for generating data from non-secret parameters such as session_id) */
 	if (!key)
 	{
 		memset(implicit_key, 0, sizeof(implicit_key));
