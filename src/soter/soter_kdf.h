@@ -34,7 +34,7 @@
 struct soter_kdf_context_buf_type
 {
 	const uint8_t *data;
-	uint8_t length;
+	size_t length;
 };
 
 /** @brief context buffer typedef */

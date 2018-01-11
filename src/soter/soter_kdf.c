@@ -35,7 +35,7 @@ soter_status_t soter_kdf(const void *key, size_t key_length, const char *label, 
 
 	uint8_t implicit_key[32];
 
-    syslog(LOG_CRIT, "THEMIS LOG: soter_kdf 2: out_length = %zu, context.len = %c", out_length, context[0].length);
+    syslog(LOG_CRIT, "THEMIS LOG: soter_kdf 2: out_length = %zu, context.len = %zu", out_length, context[0].length);
 
 
     /* If key is not specified, we will generate it from other information (useful for using this kdf for generating data from non-secret parameters such as session_id) */
